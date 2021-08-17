@@ -1,0 +1,37 @@
+{
+	"type": "GStreamer",
+	"template": ["urisourcebin name=source ! decodebin ! video/x-raw ",
+				" ! videoconvert name=videoconvert",
+				" ! gvaclassify model={models[object_classification][textile-defect][network]} inference-region=full-frame name=classification",
+				" ! tee name=t ! queue",
+				" ! gvametaconvert name=metaconvert",
+				" ! gvapython name=gvapython module=/home/video-analytics-serving/extensions/add_frame_id.py class=FrameCounter",
+				" ! gvametapublish name=destination",
+				" ! appsink name=appsink",
+				" t. ! queue ! gvawatermark ! videoconvert ! jpegenc ! multifilesink name=filesink"
+				],
+	"description": "Object classification pipeline using textile-defect model extended to add frame count to meta-data and save frames to disk",
+	"parameters": {
+		"type": "object",
+		"properties": {
+			"add-empty-results": {
+				"element": "metaconvert",
+				"type": "boolean",
+				"default": true
+			},
+			"max-files": {
+				"element": "filesink",
+				"type": "integer",
+				"default": 1000
+			},
+			"file-location": {
+				"element": {
+					"name": "filesink",
+					"property" : "location"
+				},
+				"type": "string",
+				"default": "/tmp/%08d.jpg"
+			}
+		}
+	}
+}

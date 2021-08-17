@@ -1,0 +1,29 @@
+{
+	"id" : "ID-000000000002",
+	"name" : "Air_ORRA_RTSF",
+	"description" : "Project Air/Exgexfoundry integration",
+	"created" : "2021-06-15",
+	"parameter" : {
+		"build" : {},
+		"deploy" : {
+    		"ServiceType" : "docker|docker-oh",
+    		"Method": "Script",
+    		"NoF1Descriptor": "True",
+			"Deployable" : "",
+        	"TargetServer":"http://54.157.165.142:3090/v1",
+        	"Username":"admin:NRtypkkV2fO514hZcvVz0Z194AhiPz@myorg",
+        	"Platform":"linux/amd64",
+        	"DeployConstrains" : "[\"role == RTSF_Demo\"]",
+        	"ServiceProperties" : "{}"
+		},
+		"undeploy" : {
+    		"ServiceType" : "docker|docker-oh",
+    		"Method": "Script",
+    		"NoF1Descriptor": "True",
+			"Deployable" : "",
+        	"TargetServer":"http://54.157.165.142:3090/v1",
+        	"Username":"admin:NRtypkkV2fO514hZcvVz0Z194AhiPz@myorg",
+        	"Platform":"linux/amd64"
+		}
+	}
+}

@@ -1,0 +1,31 @@
+/home/ubuntu/docker/run.sh 
+
+--network host 
+--pipelines /home/ubuntu/samples/textile_defect_classifier/pipelines 
+
+--models /home/ubuntu/samples/textile_defect_classifier/models 
+
+-v /home/ubuntu/samples/textile_defect_classifier/extensions/add_frame_id.py:/home/video-analytics-serving/extensions/add_frame_id.py 
+-v /home/ubuntu/samples/textile_defect_classifier/frame_store:/home/ubuntu/samples/textile_defect_classifier/frame_store 
+-v /home/ubuntu/samples/textile_defect_classifier/data:/home/video-analytics-serving/data
+
+
+
+
+
+
+docker run -it --rm 
+-v /home/ubuntu/vas/video-analytics-serving/samples/textile_defect_classifier/extensions/add_frame_id.py:/home/video-analytics-serving/extensions/add_frame_id.py 
+-v /home/ubuntu/vas/video-analytics-serving/frame_store:/home/ubuntu/vas/video-analytics-serving/frame_store 
+-v /home/ubuntu/vas/video-analytics-serving/samples/textile_defect_classifier/data:/home/video-analytics-serving/data 
+-v /var/tmp:/var/tmp 
+-v /home/ubuntu/vas/video-analytics-serving/samples/textile_defect_classifier/models:/home/video-analytics-serving/models 
+-v /home/ubuntu/vas/video-analytics-serving/samples/textile_defect_classifier/pipelines:/home/video-analytics-serving/pipelines 
+--device /dev/ion 
+--network host 
+-p 8080:8080 
+--name video-analytics-serving-gstreamer 
+--user 1000 
+--group-add audio 
+--group-add users 
+video-analytics-serving-gstreamer

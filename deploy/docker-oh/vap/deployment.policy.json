@@ -1,0 +1,32 @@
+{
+    "label": "",
+    "description": "",
+    "service": {
+        "serviceVersions": [
+            {
+                "version": "0.1.0",
+                "priority": {}
+            }
+        ],
+        "name": "vap",
+        "org": "myorg",
+        "arch": "amd64"
+    },
+    "properties": [],
+    "userInput": [
+        {
+            "serviceVersionRange": "[0.0.0,INFINITY)",
+            "inputs": [
+                {
+                    "name": "HW_WHO",
+                    "value": "Valued Customer"
+                }
+            ],
+            "serviceOrgid": "myorg",
+            "serviceUrl": "vap"
+        }
+    ],
+    "constraints": [
+        "role == RTSF_Demo"
+    ]
+}

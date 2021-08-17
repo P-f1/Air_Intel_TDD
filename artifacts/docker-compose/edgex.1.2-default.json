@@ -1,0 +1,5 @@
+{
+    "CONSUL_CLIENT_INTERFACE": "enp0s3",
+    "CONSUL_BIND_INTERFACE": "enp0s3", 
+    "Artifacts":"/home/ubuntu/loss-detection-app"
+}

@@ -1,0 +1,54 @@
+version: '3.4'
+
+networks:
+  textile-defect-detection_edgex-network:
+    external: true   
+
+services:
+  cv-region-of-interest:
+    image: bigoyang/textile-defect-detection:latest
+    container_name: textile-defect-detection
+    hostname: textile-defect-detection
+    environment:
+      - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
+      - DEFECT=missing_pick
+      - MQTT_BROKER_HOST=localhost
+      - MQTT_BROKER_PORT=1883
+      - MQTT_BROKER_TOPIC=vaserving
+      - MQTT_DESTINATION_HOST=localhost:1883
+      - CAMERA0_SRC=file:///home/video-analytics-serving/data/textile.mp4
+    devices:
+      - /dev/ion:/dev/ion
+    volumes:
+      - ${USER_HOME}/.Xauthority:/home/video-analytics-serving/.Xauthority 
+      - ${Artifacts}/samples/textile_defect_classifier:/home/video-analytics-serving/samples/textile_detect_classifier 
+      - ${Artifacts}/frame_store:/home/ubuntu/vas/video-analytics-serving/frame_store 
+      - /var/tmp:/var/tmp 
+    networks:
+      - textile-defect-detection_edgex-network
+    depends_on:
+      - video-analytic
+
+  video-analytic:
+    image: video-analytics-serving-gstreamer:latest
+    ports:
+      - "8090:8080"
+    container_name: video-analytic
+    hostname: video-analytic
+    privileged: true
+    networks:
+      - textile-defect-detection_edgex-network
+    environment:
+      DISPLAY: ${DISPLAY}
+    devices:
+#      - /dev/video0:/dev/video0
+#      - /dev/dri:/dev/dri
+      - /dev/ion:/dev/ion
+    volumes:
+      - ${Artifacts}/samples/textile_defect_classifier/models:/home/video-analytics-serving/models
+      - ${Artifacts}/samples/textile_defect_classifier/pipelines:/home/video-analytics-serving/pipelines
+      - ${Artifacts}/samples/textile_defect_classifier/extensions/add_frame_id.py:/home/video-analytics-serving/extensions/add_frame_id.py
+      - ${Artifacts}/samples/textile_defect_classifier/data:/home/video-analytics-serving/data
+      - ${Artifacts}/frame_store:${Artifacts}/frame_store
+      - /var/tmp:/var/tmp
+      

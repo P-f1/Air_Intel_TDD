@@ -1,0 +1,278 @@
+# /*******************************************************************************
+#  * Copyright 2020 Redis Labs Inc.
+#  * Copyright 2020 Intel Corporation.
+#  *
+#  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+#  * in compliance with the License. You may obtain a copy of the License at
+#  *
+#  * http://www.apache.org/licenses/LICENSE-2.0
+#  *
+#  * Unless required by applicable law or agreed to in writing, software distributed under the License
+#  * is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+#  * or implied. See the License for the specific language governing permissions and limitations under
+#  * the License.
+#  *
+#  * @author: Jim White, Dell
+#  * @author: Andre Srinivasan, Redis Labs
+#  * @author: Leonard Goodell, Intel
+#  * EdgeX Foundry, Geneva, version 1.2.0
+#  * added: May 14, 2020
+#  *******************************************************************************/
+
+# NOTE:  this Docker Compose file does not contain the security services - namely the API Gateway
+# and Secret Store
+
+version: '3.4'
+
+# all common shared environment variables defined here:
+x-common-env-variables: &common-variables
+  EDGEX_SECURITY_SECRET_STORE: "false"
+  Registry_Host: edgex-core-consul
+  Clients_CoreData_Host: edgex-core-data
+  Clients_Data_Host: edgex-core-data # For device Services
+  Clients_Notifications_Host: edgex-support-notifications
+  Clients_Metadata_Host: edgex-core-metadata
+  Clients_Command_Host: edgex-core-command
+  Clients_Scheduler_Host: edgex-support-scheduler
+  Clients_RulesEngine_Host: edgex-kuiper
+  Clients_VirtualDevice_Host: edgex-device-virtual
+  Databases_Primary_Host: edgex-redis
+#  Registry_Host: localhost
+#  Clients_CoreData_Host: localhost
+#  Clients_Data_Host: localhost # For device Services
+#  Clients_Notifications_Host: localhost
+#  Clients_Metadata_Host: localhost
+#  Clients_Command_Host: localhost
+#  Clients_Scheduler_Host: localhost
+#  Clients_RulesEngine_Host: localhost
+#  Clients_VirtualDevice_Host: localhost
+#  Databases_Primary_Host: localhost
+  # Required in case old configuration from previous release used.
+  # Change to "true" if re-enabling logging service for remote logging
+  Logging_EnableRemote: "false"
+
+volumes:
+  db-data:
+  log-data:
+  consul-config:
+  consul-data:
+
+services:
+  consul:
+    image: edgexfoundry/docker-edgex-consul:1.2.0
+    ports:
+      - "localhost:8400:8400"
+      - "localhost:8500:8500"
+      - "8500:8500"
+    container_name: edgex-core-consul
+    hostname: edgex-core-consul
+    networks:
+      - edgex-network
+    volumes:
+      - consul-config:/consul/config:z
+      - consul-data:/consul/data:z
+    environment: 
+      EDGEX_DB: localhost
+      EDGEX_SECURE: false
+      CONSUL_CLIENT_INTERFACE: ${CONSUL_CLIENT_INTERFACE}
+      CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE} 
+
+  redis:
+    image: redis:5.0.8-alpine
+    ports:
+      - "localhost:6379:6379"
+    container_name: edgex-redis
+    hostname: edgex-redis
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+    volumes:
+      - db-data:/data:z
+
+  notifications:
+    image: edgexfoundry/docker-support-notifications-go:1.2.1
+    ports:
+      - "localhost:48060:48060"
+    container_name: edgex-support-notifications
+    hostname: edgex-support-notifications
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-support-notifications
+#      Service_Host: localhost
+    entrypoint:
+      - /support-notifications
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - consul
+      - redis
+
+  metadata:
+    image: edgexfoundry/docker-core-metadata-go:1.2.1
+    ports:
+      - "localhost:48081:48081"
+    container_name: edgex-core-metadata
+    hostname: edgex-core-metadata
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-core-metadata
+#      Service_Host: localhost
+      Service_Timeout: "20000"
+      Notifications_Sender: edgex-core-metadata
+#      Notifications_Sender: localhost
+    entrypoint:
+      - /core-metadata
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - consul
+      - redis
+      - notifications
+
+  data:
+    image: edgexfoundry/docker-core-data-go:1.2.1
+    ports:
+      - "localhost:48080:48080"
+      - "localhost:5563:5563"
+    container_name: edgex-core-data
+    hostname: edgex-core-data
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-core-data
+#      Service_Host: localhost
+    entrypoint:
+      - /core-data
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - consul
+      - redis
+      - metadata
+
+  command:
+    image: edgexfoundry/docker-core-command-go:1.2.1
+    ports:
+      - "localhost:48082:48082"
+    container_name: edgex-core-command
+    hostname: edgex-core-command
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-core-command
+#      Service_Host: localhost
+    entrypoint:
+      - /core-command
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - consul
+      - redis
+      - metadata
+
+  scheduler:
+    image: edgexfoundry/docker-support-scheduler-go:1.2.1
+    ports:
+      - "localhost:48085:48085"
+    container_name: edgex-support-scheduler
+    hostname: edgex-support-scheduler
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-support-scheduler
+      IntervalActions_ScrubPushed_Host: edgex-core-data
+      IntervalActions_ScrubAged_Host: edgex-core-data
+#      Service_Host: localhost
+#      IntervalActions_ScrubPushed_Host: localhost
+#      IntervalActions_ScrubAged_Host: localhost
+    entrypoint:
+      - /support-scheduler
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - consul
+      - redis
+
+  mqtt:
+    image: eclipse-mosquitto:1.5.8
+    ports:
+      - "1883:1883"
+    container_name: mqtt
+    hostname: mqtt
+    networks:
+      - edgex-networks
+
+#################################################################
+# Device Services
+#################################################################
+
+  device-rest:
+    image: edgexfoundry/docker-device-rest-go:1.1.1
+    ports:
+      - "49986:49986"
+    container_name: edgex-device-rest
+    hostname: edgex-device-rest
+    volumes:
+      - ${Artifacts}/res/device-rest-go/:/res/
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-rest
+#      Service_Host: localhost
+    entrypoint:
+      - /device-rest-go
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - data
+      - command
+
+  device-mqtt:
+    image: edgexfoundry/docker-device-mqtt-go:1.2.1
+    ports:
+      - "49982:49982"
+    container_name: edgex-device-mqtt
+    hostname: edgex-device-mqtt
+    volumes:
+      - ${Artifacts}/res/device-mqtt-go/:/res/
+    networks:
+      - edgex-network
+    environment:
+      <<: *common-variables
+      Service_Host: edgex-device-mqtt
+#      Service_Host: localhost
+      Driver_IncomingHost: mqtt
+#      Driver_IncomingHost: localhost
+      Driver_ResponseHost: mqtt
+      Driver_ResponseHost: localhost
+      Driver_IncomingTopic: edgex/#
+      Driver_IncomingClientId: edgex-mqtt-sub
+      Driver_ResponseClientId: edgex-mqtt-command-sub
+      Driver_ResponseTopic: Edgex-command-response
+    entrypoint:
+      - /device-mqtt
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
+    depends_on:
+      - data
+      - command
+
+networks:
+  edgex-network:
+    driver: "bridge"
