@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3.8
 
 RUN pip3 install paho-mqtt requests
 RUN pip3 install opencv-python
