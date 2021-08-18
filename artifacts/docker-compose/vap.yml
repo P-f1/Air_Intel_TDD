@@ -1,14 +1,14 @@
 version: '3.4'
 
 networks:
-  edgex.1.2_textile-defect-detection:
+  edgex12_textile-defect-detection:
     external: true   
 
 services:
   cv-region-of-interest:
-    image: bigoyang/edgex.1.2_textile-defect-detection:latest
-    container_name: edgex.1.2_textile-defect-detection
-    hostname: edgex.1.2_textile-defect-detection
+    image: bigoyang/edgex12_textile-defect-detection:latest
+    container_name: edgex12_textile-defect-detection
+    hostname: edgex12_textile-defect-detection
     environment:
       - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
       - DEFECT=missing_pick
@@ -25,7 +25,7 @@ services:
       - ${Artifacts}/frame_store:/home/ubuntu/vas/video-analytics-serving/frame_store 
       - /var/tmp:/var/tmp 
     networks:
-      - edgex.1.2_textile-defect-detection
+      - edgex12_textile-defect-detection
     depends_on:
       - video-analytic
 
@@ -37,7 +37,7 @@ services:
     hostname: video-analytic
     privileged: true
     networks:
-      - edgex.1.2_textile-defect-detection
+      - edgex12_textile-defect-detection
     environment:
       DISPLAY: ${DISPLAY}
     devices:
