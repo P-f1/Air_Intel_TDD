@@ -170,7 +170,7 @@ services:
     container_name: mqtt
     hostname: mqtt
     networks:
-      - edgex-network  
+      - textile-defect-detection_edgex-network  
 
 #################################################################
 # Device Services
