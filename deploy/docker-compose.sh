@@ -17,7 +17,7 @@ function deploy {
 
 	cp -R $Descriptor ./$DeployType/$ServiceName
 	
-	if [[ -f "$ArtifactsFolder" ]]; then
+	if [[ -d "$ArtifactsFolder" ]]; then
 #		cp -R /home/f1/projects/Air_Intel_TDD/artifacts/vap/* docker/vap
 		echo "Extra resource found!!!"
 		cp -R $ArtifactsFolder/* ./$DeployType/$ServiceName
