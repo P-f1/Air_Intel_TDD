@@ -105,7 +105,7 @@ def send_request_to_vas():
 if __name__ == "__main__":
 #    send_request_to_vas()
 #    vaclient.start(VAClientArgs(args))
-    client = mqtt.Client("Textile Defect Detector", userdata=args)
+    client = mqtt.Client("Textile Defect Detector")
     client.on_connect = on_connect
     client.on_message = on_message
     client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
