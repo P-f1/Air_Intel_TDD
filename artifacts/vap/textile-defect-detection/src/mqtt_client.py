@@ -108,5 +108,5 @@ if __name__ == "__main__":
     client = mqtt.Client("Textile Defect Detector")
     client.on_connect = on_connect
     client.on_message = on_message
-    client.connect(MQTT_BROKER_HOST, MQTT_BROKER_PORT)
+    client.connect(MQTT_BROKER_HOST, int(MQTT_BROKER_PORT), MQTT_KEEPALIVE)
     client.loop_forever()
