@@ -57,7 +57,7 @@ services:
     container_name: edgex-core-consul
     hostname: edgex-core-consul
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     volumes:
       - consul-config:/consul/config:z
       - consul-data:/consul/data:z
@@ -74,7 +74,7 @@ services:
     container_name: edgex-redis
     hostname: edgex-redis
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
     volumes:
@@ -87,7 +87,7 @@ services:
     container_name: edgex-support-notifications
     hostname: edgex-support-notifications
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-support-notifications
@@ -102,7 +102,7 @@ services:
     container_name: edgex-core-metadata
     hostname: edgex-core-metadata
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-core-metadata
@@ -121,7 +121,7 @@ services:
     container_name: edgex-core-data
     hostname: edgex-core-data
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-core-data
@@ -137,7 +137,7 @@ services:
     container_name: edgex-core-command
     hostname: edgex-core-command
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-core-command
@@ -153,7 +153,7 @@ services:
     container_name: edgex-support-scheduler
     hostname: edgex-support-scheduler
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-support-scheduler
@@ -170,7 +170,7 @@ services:
     container_name: mqtt
     hostname: mqtt
     networks:
-      - textile-defect-detection_edgex-network  
+      - textile-defect-detection  
 
 #################################################################
 # Device Services
@@ -185,7 +185,7 @@ services:
     volumes:
       - ${Artifacts}/res/device-rest-go/:/res/
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-device-rest
@@ -202,7 +202,7 @@ services:
     volumes:
       - ${Artifacts}/res/device-mqtt-go/:/res/
     networks:
-      - textile-defect-detection_edgex-network
+      - textile-defect-detection
     environment:
       <<: *common-variables
       Service_Host: edgex-device-mqtt
@@ -217,5 +217,5 @@ services:
       - command
 
 networks:
-  textile-defect-detection_edgex-network:
+  textile-defect-detection:
     driver: "bridge"
