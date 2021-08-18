@@ -47,7 +47,7 @@ function deploy {
 		else
 			echo "Deploy Locally !!"
 #			docker-compose rm -f $ServiceName".yml"
-			docker-compose up $Mode --build -f $ServiceName".yml"
+			docker-compose -f $ServiceName".yml" up $Mode --build
 		fi
 	fi
 }
