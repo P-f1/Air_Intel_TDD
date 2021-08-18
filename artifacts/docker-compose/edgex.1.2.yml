@@ -62,7 +62,7 @@ services:
     image: edgexfoundry/docker-edgex-consul:1.2.0
     ports:
       - "localhost:8400:8400"
-      - "localhost:8500:8500"
+#      - "localhost:8500:8500"
       - "8500:8500"
     container_name: edgex-core-consul
     hostname: edgex-core-consul
