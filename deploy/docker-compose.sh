@@ -40,7 +40,8 @@ function deploy {
 				#docker-compose --context $DockerContext up -d
 				docker-compose -H "ssh://$Username@$TargetServer:$Port" up  -f $ServiceName".yml" $Mode --build
 			else
-				docker-compose -H "ssh://$Username@$TargetServer" rm  -f $ServiceName".yml" 
+				ls
+				echo docker-compose -H "ssh://$Username@$TargetServer" rm  -f $ServiceName".yml" 
 				#docker-compose --context $DockerContext up -d
 				echo docker-compose -H "ssh://$Username@$TargetServer" -f $ServiceName".yml" up $Mode --build
 			fi
