@@ -24,6 +24,7 @@ services:
       - ${USER_HOME}/.Xauthority:/home/video-analytics-serving/.Xauthority 
       - ${Artifacts}/samples/textile_defect_classifier:/home/video-analytics-serving/samples/textile_detect_classifier 
       - ${Artifacts}/frame_store:/home/ubuntu/vas/video-analytics-serving/frame_store 
+      - ${Artifacts}/vaclient:/home/video-analytics-serving/vaclient
       - /var/tmp:/var/tmp 
     networks:
       - edgex12_textile-defect-detection
