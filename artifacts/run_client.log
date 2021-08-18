@@ -62,14 +62,14 @@ Body:{
 		'type': 'uri'
 	}, 
 	'destination': {
-		'metadata': {'type': 'mqtt', 
-		'path': '/tmp/results.jsonl', 
-		'format': 'json-lines', 
-		'host': 'localhost:1883', 
-		'topic': 'vaserving'
-	}
-}, 
-'parameters': {
-	'file-location': '/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg'
+			'metadata': {'type': 'mqtt', 
+			'path': '/tmp/results.jsonl', 
+			'format': 'json-lines', 
+			'host': 'localhost:1883', 
+			'topic': 'vaserving'
+		}
+	}, 
+	'parameters': {
+		'file-location': '/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg'
 	}
 }
