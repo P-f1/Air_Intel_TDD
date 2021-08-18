@@ -3,7 +3,7 @@ function deploy {
 	DeployBaseFolder=$(pwd)
 	ProjectBaseFolder=${DeployBaseFolder%/*}
 	WorkingFolder=$DeployBaseFolder"/"$DeployType
-	ArtifactsFolder=$ProjectBaseFolder"/artifacts/docker-compose/"$ServiceName
+	ArtifactsFolder=$ProjectBaseFolder"/artifacts/"$ServiceName
 	Descriptor=$ProjectBaseFolder"/artifacts/docker-compose/"$ServiceName".yml"
 
 	echo "BaseFolder="$DeployBaseFolder
