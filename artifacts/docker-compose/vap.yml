@@ -5,7 +5,7 @@ networks:
     external: true   
 
 services:
-  cv-region-of-interest:
+  textile-defect-detection:
     build: ./textile-defect-detection
 #    image: bigoyang/textile-defect-detection:latest
     container_name: textile-defect-detection
