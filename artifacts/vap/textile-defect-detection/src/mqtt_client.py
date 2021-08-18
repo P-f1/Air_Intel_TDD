@@ -97,11 +97,11 @@ if __name__ == "__main__":
     client = mqtt.Client("Textile Defect Detector")
     client.on_connect = on_connect
     client.on_message = on_message
-    mqttClient.on_subscribe = on_subscribe
+    client.on_subscribe = on_subscribe
     
     try:
         client.connect(MQTT_BROKER_HOST, int(MQTT_BROKER_PORT), MQTT_KEEPALIVE)
-        mqttClient.loop_forever()
+        client.loop_forever()
     except:
         print("Unexpected error:", sys.exc_info()[0])
         print("WARNING: Enter Exit Service could not connect to mqtt broker, no enter exit messages will be produced")
