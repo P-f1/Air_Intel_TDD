@@ -18,7 +18,7 @@ function deploy {
 	cp -R $Descriptor ./$DeployType/$ServiceName
 	
 	if [ -f "$ArtifactsFolder" ]; then
-		cp $ArtifactsFolder/* ./$DeployType/$ServiceName/$InstanceID
+		cp -R $ArtifactsFolder/* ./$DeployType/$ServiceName
 	fi
 
 	cd ./$DeployType/$ServiceName
