@@ -5,6 +5,7 @@ function deploy {
 	WorkingFolder=$DeployBaseFolder"/"$DeployType
 	ArtifactsFolder=$ProjectBaseFolder"/artifacts/docker-compose"
 	PluginsFolder=$ProjectBaseFolder"/artifacts/plugins/python"
+	Descriptor=$ArtifactsFolder"/"$ServiceName".yml"
 
 	echo "BaseFolder="$DeployBaseFolder
 	echo "WorkingFolder="$WorkingFolder
