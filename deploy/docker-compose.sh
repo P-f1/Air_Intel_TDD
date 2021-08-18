@@ -36,19 +36,19 @@ function deploy {
 		if [[ -n $TargetServer ]]; then
 			echo "Deploy Remotely !!"
 			if [[ -n $Port ]]; then
-				docker-compose -H "ssh://$Username@$TargetServer:$Port" -f $ServiceName".yml" rm
+				docker-compose -H "ssh://$Username@$TargetServer:$Port" rm  -f $ServiceName".yml"
 				#docker-compose --context $DockerContext up -d
 				docker-compose -H "ssh://$Username@$TargetServer:$Port" up  -f $ServiceName".yml" $Mode --build
 			else
 				ls
-				docker-compose -H "ssh://$Username@$TargetServer" -f $ServiceName".yml" rm
+				docker-compose -H "ssh://$Username@$TargetServer" rm  -f $ServiceName".yml"
 				#docker-compose --context $DockerContext up -d
-				docker-compose -H "ssh://$Username@$TargetServer" -f $ServiceName".yml" up $Mode --build
+				docker-compose -H "ssh://$Username@$TargetServer" up $Mode --build -f $ServiceName".yml"
 			fi
 		else
 			echo "Deploy Locally !!"
-			docker-compose -f $ServiceName".yml" rm
-			docker-compose up -f $ServiceName".yml" $Mode --build
+			docker-compose rm -f $ServiceName".yml"
+			docker-compose  up $Mode --build -f $ServiceName".yml"
 		fi
 	fi
 }
