@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.7-slim
 
 RUN pip3 install paho-mqtt requests
 RUN pip3 install opencv-python-headless==3.4.15.55
