@@ -42,7 +42,7 @@ function deploy {
 			else
 				docker-compose -H "ssh://$Username@$TargetServer" rm -f
 				#docker-compose --context $DockerContext up -d
-				docker-compose -H "ssh://$Username@$TargetServer" -f $ServiceName".yml" up $Mode --build
+				echo docker-compose -H "ssh://$Username@$TargetServer" -f $ServiceName".yml" up $Mode --build
 			fi
 		else
 			echo "Deploy Locally !!"
