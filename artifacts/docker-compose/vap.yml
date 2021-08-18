@@ -6,7 +6,7 @@ networks:
 
 services:
   cv-region-of-interest:
-    build: ./vap/textile-defect-detection
+    build: ./textile-defect-detection
 #    image: bigoyang/textile-defect-detection:latest
     container_name: textile-defect-detection
     hostname: textile-defect-detection
