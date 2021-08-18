@@ -22,7 +22,7 @@
 # NOTE:  this Docker Compose file does not contain the security services - namely the API Gateway
 # and Secret Store
 
-version: '3.4'
+version: '3.7'
 
 # all common shared environment variables defined here:
 x-common-env-variables: &common-variables
@@ -62,7 +62,7 @@ services:
     image: edgexfoundry/docker-edgex-consul:1.2.0
     ports:
       - "localhost:8400:8400"
-#      - "localhost:8500:8500"
+      - "localhost:8500:8500"
       - "8500:8500"
     container_name: edgex-core-consul
     hostname: edgex-core-consul
