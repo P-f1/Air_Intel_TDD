@@ -6,9 +6,10 @@ networks:
 
 services:
   cv-region-of-interest:
-    image: bigoyang/edgex12_textile-defect-detection:latest
-    container_name: edgex12_textile-defect-detection
-    hostname: edgex12_textile-defect-detection
+    build: ./vap/textile-defect-detection
+#    image: bigoyang/textile-defect-detection:latest
+    container_name: textile-defect-detection
+    hostname: textile-defect-detection
     environment:
       - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
       - DEFECT=missing_pick
