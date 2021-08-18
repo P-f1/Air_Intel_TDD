@@ -84,7 +84,18 @@ def send_request_to_vas():
 
 
 if __name__ == "__main__":
-#    send_request_to_vas()
+
+    print("EDGEX_DEVICE_NAME        : {}", EDGEX_DEVICE_NAME)
+    print("EDGEX_TDD_EVENT          : {}", EDGEX_TDD_EVENT)
+    print("CAMERA0_SRC              : {}", CAMERA0_SRC)
+    print("DEFECT                   : {}", DEFECT)
+    print("FRAME_STORE_TEMPLATE     : {}", FRAME_STORE_TEMPLATE)
+    print("MQTT_BROKER_HOST         : {}", MQTT_BROKER_HOST)
+    print("MQTT_BROKER_PORT         : {}", MQTT_BROKER_PORT)
+    print("MQTT_BROKER_TOPIC        : {}", MQTT_BROKER_TOPIC)
+    print("MQTT_OUTBOUND_TOPIC_NAME : {}", edgex)
+    print("MQTT_KEEPALIVE           : {}", 12*60*60)
+
     client = mqtt.Client("Textile Defect Detector")
     client.on_connect = on_connect
     client.on_message = on_message
@@ -95,5 +106,5 @@ if __name__ == "__main__":
         client.loop_forever()
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        print("WARNING: Enter Exit Service could not connect to mqtt broker, no enter exit messages will be produced")
+        print("WARNING: Textile defect detection service could not connect to mqtt broker, no messages will be produced")
 
