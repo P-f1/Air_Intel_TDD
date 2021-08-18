@@ -13,8 +13,9 @@ import os.path
 from os import path
 import os
 import time
-sys.path.append("/home/video-analytics-serving/vaclient")
-import vaclient
+#sys.path.append("/home/video-analytics-serving/vaclient")
+#import vaclient
+import requests 
 
 CAMERA0_SRC = os.environ['CAMERA0_SRC']
 DEFECT = os.environ['DEFECT']
@@ -69,24 +70,41 @@ def wait_for_frame(frame_path):
     return True
 
 # Helper class to create vaclient arguments from command line arguments
-class VAClientArgs():
-    def __init__(self, args):
-        self.pipeline = "object_classification/textile_defect"
-        self.uri = CAMERA0_SRC
-        self.destination = {
-            "type" : "mqtt",
-            "host": MQTT_BROKER_HOST + ":" + str(MQTT_BROKER_PORT),
-            "topic" : MQTT_BROKER_TOPIC,
-        }
-        self.parameters = {
-            "file-location" : FRAME_STORE_TEMPLATE
-        }
-        self.verbose = False,
-        self.show_request = False
+#class VAClientArgs():
+#    def __init__(self, args):
+#        self.pipeline = "object_classification/textile_defect"
+#        self.uri = CAMERA0_SRC
+#        self.destination = {
+#            "type" : "mqtt",
+#            "host": MQTT_BROKER_HOST + ":" + str(MQTT_BROKER_PORT),
+#            "topic" : MQTT_BROKER_TOPIC,
+#        }
+#        self.parameters = {
+#            "file-location" : FRAME_STORE_TEMPLATE
+#        }
+#        self.verbose = False,
+#        self.show_request = False
+
+def send_request_to_vas():
+    data = {}
+    data['source'] = camConfig['source']
+    data['destination'] =  camConfig['destination']   
+    data['tags'] =  camConfig['tags']  
+    data['parameters'] = camConfig['parameters']       
+    jsonData = json.dumps(data)            
+    endpoint = camConfig['camEndpoint']  
+    print(jsonData)
+    headers = {'Content-type': 'application/json'}
+    r = requests.post(url = endpoint, data = jsonData, headers = headers) 
+    if r.status_code == 200:
+        print("Created new pipeline with id: %s"%r.text)
+    else:
+        print("Error creating pipeline: %s"%r)
+
 
 if __name__ == "__main__":
-    
-    vaclient.start(VAClientArgs(args))
+#    send_request_to_vas()
+#    vaclient.start(VAClientArgs(args))
     client = mqtt.Client("Textile Defect Detector", userdata=args)
     client.on_connect = on_connect
     client.on_message = on_message
