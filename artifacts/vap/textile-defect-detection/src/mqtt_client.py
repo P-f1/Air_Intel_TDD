@@ -63,6 +63,7 @@ def wrap_edgex_event(device_name, cmd_name, data):
     edgexMQTTWrapper["name"] = device_name
     edgexMQTTWrapper["cmd"] = cmd_name
     edgexMQTTWrapper[cmd_name] = data
+    print(edgexMQTTWrapper)
     return json.dumps(edgexMQTTWrapper)
 
 def send_request_to_vas():
