@@ -1,0 +1,21 @@
+name: "device-cv-tdd-mqtt"
+manufacturer: "Intel"
+model: "CV TDD events"
+labels:
+  - "cv"
+  - "tdd"
+description: "A device for CV textile defect detection (TDD) events"
+
+deviceResources:
+  - name: "cv-tdd-event"
+    description: "A CV TDD event"
+    properties:
+      value:
+        { type: "String", readWrite: "RW", defaultValue: "" }
+      units:
+        { type: "String", readWrite: "RW", defaultValue: "" }
+
+deviceCommands:
+  - name: "cv-tdd-event"
+    get:
+      - { operation: "get", object: "cv-tdd-event", property: "value", parameter: "cv-tdd-event" }

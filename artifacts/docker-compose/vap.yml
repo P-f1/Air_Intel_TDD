@@ -11,6 +11,8 @@ services:
     container_name: textile-defect-detection
     hostname: textile-defect-detection
     environment:
+      - EDGEX_DEVICE_NAME=device-tdd-roi-mqtt
+      - EDGEX_TDD_EVENT=cv-tdd-event
       - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
       - DEFECT=missing_pick
       - MQTT_BROKER_HOST=mqtt

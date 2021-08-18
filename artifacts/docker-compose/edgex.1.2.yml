@@ -176,23 +176,6 @@ services:
 # Device Services
 #################################################################
 
-  device-rest:
-    image: edgexfoundry/docker-device-rest-go:1.1.1
-    ports:
-      - "49986:49986"
-    container_name: edgex-device-rest
-    hostname: edgex-device-rest
-    volumes:
-      - ${Artifacts}/res/device-rest-go/:/res/
-    networks:
-      - textile-defect-detection
-    environment:
-      <<: *common-variables
-      Service_Host: edgex-device-rest
-    depends_on:
-      - data
-      - command
-
   device-mqtt:
     image: edgexfoundry/docker-device-mqtt-go:1.2.1
     ports:

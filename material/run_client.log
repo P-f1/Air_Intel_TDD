@@ -1,0 +1,292 @@
+/home/ubuntu/docker/run.sh 
+--name "" 
+--network host 
+--image video-analytics-serving-gstreamer 
+-v /home/ubuntu/.Xauthority:/home/video-analytics-serving/.Xauthority 
+-v /home/ubuntu/samples/textile_defect_classifier:/home/video-analytics-serving/samples/textile_detect_classifier 
+-v /home/ubuntu/samples/textile_defect_classifier/frame_store:/home/ubuntu/samples/textile_defect_classifier/frame_store 
+
+-e DISPLAY 
+--entrypoint python3 
+--entrypoint-args /home/video-analytics-serving/samples/textile_detect_classifier/mqtt_client.py 
+--broker-address localhost 
+--broker-port 1883 
+--topic vaserving 
+--frame-store-template /home/ubuntu/samples/textile_defect_classifier/frame_store/%08d.jpg 
+--defect missing_pick
+
+
+
+
+
+docker run -it --rm 
+-e DISPLAY 
+-v /home/ubuntu/.Xauthority:/home/video-analytics-serving/.Xauthority 
+-v /home/ubuntu/vas/video-analytics-serving/samples/textile_defect_classifier:/home/video-analytics-serving/samples/textile_detect_classifier 
+-v /home/ubuntu/vas/video-analytics-serving/frame_store:/home/ubuntu/vas/video-analytics-serving/frame_store -v /var/tmp:/var/tmp 
+--device /dev/ion 
+--network host 
+-p 8080:8080 
+--entrypoint python3 
+--name  
+--user 1000 
+--group-add audio 
+--group-add users 
+video-analytics-serving-gstreamer 
+/home/video-analytics-serving/samples/textile_detect_classifier/mqtt_client.py 
+--broker-address localhost 
+--broker-port 1883 
+--topic vaserving 
+--frame-store-template /home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg 
+--defect missing_pick
+
+
+
+{
+	'pipeline': 'object_classification/textile_defect', 
+	'uri': 'file:///home/video-analytics-serving/data/textile.mp4', 
+	'destination': {
+		'type': 'mqtt', 
+		'host': 'localhost:1883', 
+		'topic': 'vaserving'
+	}, 
+	'parameters': {
+		'file-location': '/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg'
+	}
+}
+
+POST http://localhost:8080/pipelines/object_classification/textile_defect
+Body:{
+	'source': {
+		'uri': 'file:///home/video-analytics-serving/data/textile.mp4', 
+		'type': 'uri'
+	}, 
+	'destination': {
+			'metadata': {'type': 'mqtt', 
+			'path': '/tmp/results.jsonl', 
+			'format': 'json-lines', 
+			'host': 'localhost:1883', 
+			'topic': 'vaserving'
+		}
+	}, 
+	'parameters': {
+		'file-location': '/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg'
+	}
+}
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.256742000579834, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'tags': {'target_defect': 'Staging'}, 'timestamp': 2200000000, 'frame_id': 22}
+
+
+
+
+
+
+1-14 good
+
+
+15-30 missing_pick
+
+
+31 selvedge
+32-35 good
+
+
+36-45 hole
+
+
+46-good
+
+
+47-56 stain
+
+
+57 good
+58 missing_pick
+
+
+59-68 selvedge
+
+
+69-75 good
+
+
+76-94 color_flecks
+
+
+95-100 good
+
+
+Connected to broker at mqtt:1883,
+Subscribing to topic vaserving,
+Subscribed to topic,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731592535972595, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 0, 'frame_id': 0},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973158061504364, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 100000000, 'frame_id': 1},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731690883636475, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 200000000, 'frame_id': 2},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973174750804901, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 300000000, 'frame_id': 3},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731684923171997, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 400000000, 'frame_id': 4},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973167896270752, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 500000000, 'frame_id': 5},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731693863868713, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 600000000, 'frame_id': 6},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973172664642334, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 700000000, 'frame_id': 7},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731595516204834, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 800000000, 'frame_id': 8},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731622338294983, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 900000000, 'frame_id': 9},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973144054412842, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1000000000, 'frame_id': 10},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731234908103943, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1100000000, 'frame_id': 11},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731109738349915, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1200000000, 'frame_id': 12},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973119616508484, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1300000000, 'frame_id': 13},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29728275537490845, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1400000000, 'frame_id': 14},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.256742388010025, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1500000000, 'frame_id': 15},
+FrameID 15: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000015.jpg,
+
+{
+	'objects': [{
+		'classification_layer_name:predictions_1/Softmax': {
+			'confidence': 0.256742388010025, 
+			'label': 'missing_pick', 
+			'label_id': 3, 
+			'model': {
+				'name': 'multi_xception_2020-09-24_21:27:37'
+			}
+		}, 
+		'h': 1920, 
+		'w': 2296, 
+		'x': 0, 
+		'y': 0
+	}], 
+	'resolution': {
+		'height': 1920, 
+		'width': 2296
+	}, 
+	'source': 'file:///home/video-analytics-serving/data/textile.mp4', 
+	'tags': {'target_defect': 'Staging'},
+	'timestamp': 1600000000, 
+	'frame_id': 16
+},
+
+FrameID 16: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000016.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567412555217743, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1700000000, 'frame_id': 17},
+FrameID 17: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000017.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567412853240967, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1800000000, 'frame_id': 18},
+FrameID 18: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000018.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567424774169922, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 1900000000, 'frame_id': 19},
+FrameID 19: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000019.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25674256682395935, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2000000000, 'frame_id': 20},
+FrameID 20: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000020.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25674331188201904, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2100000000, 'frame_id': 21},
+FrameID 21: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000021.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.256742000579834, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2200000000, 'frame_id': 22},
+FrameID 22: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000022.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567419111728668, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2300000000, 'frame_id': 23},
+FrameID 23: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000023.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567406892776489, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2400000000, 'frame_id': 24},
+FrameID 24: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000024.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567421495914459, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2500000000, 'frame_id': 25},
+FrameID 25: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000025.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25674232840538025, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2600000000, 'frame_id': 26},
+FrameID 26: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000026.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567422688007355, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2700000000, 'frame_id': 27},
+FrameID 27: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000027.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567426264286041, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2800000000, 'frame_id': 28},
+FrameID 28: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000028.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2567426264286041, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 2900000000, 'frame_id': 29},
+FrameID 29: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000029.jpg,
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25674325227737427, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3000000000, 'frame_id': 30},
+FrameID 30: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000030.jpg,
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25025674700737, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3100000000, 'frame_id': 31},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973143458366394, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3200000000, 'frame_id': 32},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.297312468290329, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3300000000, 'frame_id': 33},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973194420337677, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3400000000, 'frame_id': 34},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2971627414226532, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3500000000, 'frame_id': 35},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119342029094696, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3600000000, 'frame_id': 36},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119339346885681, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3700000000, 'frame_id': 37},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119346499443054, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3800000000, 'frame_id': 38},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119353950023651, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 3900000000, 'frame_id': 39},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119353950023651, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4000000000, 'frame_id': 40},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.31193485856056213, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4100000000, 'frame_id': 41},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.31193485856056213, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4200000000, 'frame_id': 42},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3119351863861084, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4300000000, 'frame_id': 43},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.31193438172340393, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4400000000, 'frame_id': 44},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.31193429231643677, 'label': 'hole', 'label_id': 2, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4500000000, 'frame_id': 45},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2972528636455536, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4600000000, 'frame_id': 46},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.35916954278945923, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4700000000, 'frame_id': 47},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591621518135071, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4800000000, 'frame_id': 48},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591684103012085, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 4900000000, 'frame_id': 49},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591708540916443, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5000000000, 'frame_id': 50},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591706156730652, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5100000000, 'frame_id': 51},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591686487197876, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5200000000, 'frame_id': 52},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.35916876792907715, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5300000000, 'frame_id': 53},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.35916921496391296, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5400000000, 'frame_id': 54},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.3591550588607788, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5500000000, 'frame_id': 55},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.359165757894516, 'label': 'stain', 'label_id': 5, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5600000000, 'frame_id': 56},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973167896270752, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5700000000, 'frame_id': 57},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25521036982536316, 'label': 'missing_pick', 'label_id': 3, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5800000000, 'frame_id': 58},
+FrameID 58: defect = missing_pick,
+Frame path: /home/ubuntu/vas/video-analytics-serving/frame_store/00000058.jpg,
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25476089119911194, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 5900000000, 'frame_id': 59},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25475817918777466, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6000000000, 'frame_id': 60},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2546789348125458, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6100000000, 'frame_id': 61},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25469377636909485, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6200000000, 'frame_id': 62},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25473910570144653, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6300000000, 'frame_id': 63},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2547382116317749, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6400000000, 'frame_id': 64},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2547188699245453, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6500000000, 'frame_id': 65},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2547527849674225, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6600000000, 'frame_id': 66},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25476914644241333, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6700000000, 'frame_id': 67},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.25473320484161377, 'label': 'selvedge', 'label_id': 4, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6800000000, 'frame_id': 68},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973156273365021, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 6900000000, 'frame_id': 69},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731571674346924, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7000000000, 'frame_id': 70},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973107099533081, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7100000000, 'frame_id': 71},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973136007785797, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7200000000, 'frame_id': 72},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973189055919647, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7300000000, 'frame_id': 73},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2973182201385498, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7400000000, 'frame_id': 74},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731830954551697, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7500000000, 'frame_id': 75},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836662232875824, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7600000000, 'frame_id': 76},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836872935295105, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7700000000, 'frame_id': 77},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28362613916397095, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7800000000, 'frame_id': 78},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28364723920822144, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 7900000000, 'frame_id': 79},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836168110370636, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8000000000, 'frame_id': 80},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28362780809402466, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8100000000, 'frame_id': 81},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28363046050071716, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8200000000, 'frame_id': 82},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836688160896301, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8300000000, 'frame_id': 83},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28365111351013184, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8400000000, 'frame_id': 84},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836495637893677, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8500000000, 'frame_id': 85},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2835667133331299, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8600000000, 'frame_id': 86},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28364646434783936, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8700000000, 'frame_id': 87},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836681008338928, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8800000000, 'frame_id': 88},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2835816740989685, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 8900000000, 'frame_id': 89},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836010754108429, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9000000000, 'frame_id': 90},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.28365686535835266, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9100000000, 'frame_id': 91},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836422324180603, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9200000000, 'frame_id': 92},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2836828827857971, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9300000000, 'frame_id': 93},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.2795700132846832, 'label': 'color_flecks', 'label_id': 0, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9400000000, 'frame_id': 94},
+
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.27964773774147034, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9500000000, 'frame_id': 95},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731905460357666, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9600000000, 'frame_id': 96},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731878638267517, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9700000000, 'frame_id': 97},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731205105781555, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9800000000, 'frame_id': 98},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29731714725494385, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 9900000000, 'frame_id': 99},
+{'objects': [{'classification_layer_name:predictions_1/Softmax': {'confidence': 0.29728347063064575, 'label': 'good', 'label_id': 1, 'model': {'name': 'multi_xception_2020-09-24_21:27:37'}}, 'h': 1920, 'w': 2296, 'x': 0, 'y': 0}], 'resolution': {'height': 1920, 'width': 2296}, 'source': 'file:///home/video-analytics-serving/data/textile.mp4', 'timestamp': 10000000000, 'frame_id': 100},

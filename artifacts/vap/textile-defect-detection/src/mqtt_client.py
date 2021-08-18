@@ -13,10 +13,10 @@ import os.path
 from os import path
 import os
 import time
-#sys.path.append("/home/video-analytics-serving/vaclient")
-#import vaclient
 import requests 
 
+EDGEX_DEVICE_NAME = os.environ['EDGEX_DEVICE_NAME']
+EDGEX_TDD_EVENT = os.environ['EDGEX_TDD_EVENT']
 CAMERA0_SRC = os.environ['CAMERA0_SRC']
 DEFECT = os.environ['DEFECT']
 FRAME_STORE_TEMPLATE = os.environ['FRAME_STORE_TEMPLATE']
@@ -46,27 +46,17 @@ def on_message(_unused_client, user_data, msg):
     objects = result.get("objects", [])
     for obj in objects:
         label = obj["classification_layer_name:predictions_1/Softmax"]["label"]
-        if label == DEFECT:
+        target_defect = obj["tags"]["target_defect"]
+        if label == target_defect or "*" == target_defect:
             frame_id = result["frame_id"]
-            print("FrameID {}: defect = {}".format(frame_id, label))
             frame_path = FRAME_STORE_TEMPLATE % frame_id
-            print("Frame path: {}".format(frame_path))
-            if wait_for_frame(frame_path):
-                frame = cv2.imread(frame_path)
-                image = cv2.resize(frame, (int(frame.shape[1]/2), int(frame.shape[0]/2)))
-            break
-#            client.publish(MQTT_OUTBOUND_TOPIC_NAME, mqtt_msg)
-
-# Due to pipeline timing frame save may not have completed by the time its metadata has been published
-def wait_for_frame(frame_path):
-    retry_count = 0
-    while not path.exists(frame_path):
-        if retry_count > 10:
-            print("Error: File not found")
-            return False
-        time.sleep(0.1)
-        retry_count += 1
-    return True
+            prediction = {}
+            prediction["source"] = obj['source']
+            prediction["target_defect"] = target_defect
+            prediction["label"] = label
+            prediction["frame_path"] = frame_path
+            prediction["timestamp"] = EDGEX_ENTER_EVENT
+            client.publish(MQTT_OUTBOUND_TOPIC_NAME, wrap_edgex_event(EDGEX_DEVICE_NAME, EDGEX_TDD_EVENT, json.dumps(prediction)))
     
 def wrap_edgex_event(device_name, cmd_name, data):
     edgexMQTTWrapper = {}
