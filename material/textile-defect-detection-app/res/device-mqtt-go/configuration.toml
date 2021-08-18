@@ -2,7 +2,7 @@
 LogLevel = "INFO"
 
 [Service]
-Host = "localhost"
+Host = "edgex-device-mqtt"
 Port = 49982
 Protocol = 'http'
 BootTimeout = 30000
@@ -16,7 +16,7 @@ EnableAsyncReadings = true
 AsyncBufferSize = 16
 
 [Registry]
-Host = "localhost"
+Host = "edgex-core-consul"
 Port = 8500
 CheckInterval = "10s"
 FailLimit = 3
@@ -27,14 +27,14 @@ Type = "consul"
   [Clients.Data]
   Name = "edgex-core-data"
   Protocol = "http"
-  Host = "localhost"
+  Host = "edgex-core-data"
   Port = 48080
   Timeout = 50000
 
   [Clients.Metadata]
   Name = "edgex-core-metadata"
   Protocol = "http"
-  Host = "localhost"
+  Host = "edgex-core-metadata"
   Port = 48081
   Timeout = 50000
 
@@ -102,12 +102,26 @@ File = ""
   [DeviceList.Protocols]
     [DeviceList.Protocols.mqtt]
        Schema = "tcp"
-       Host = "localhost"
+       Host = "mqtt"
        Port = "1883"
        ClientId = "edgex-mqtt-roi-command-pub"
        User = ""
        Password = ""
        Topic = "EdgeXRoiCommand"
+[[DeviceList]]
+  Name = "device-cv-tdd-mqtt"
+  Profile = "device-cv-tdd-mqtt"
+  Description = "MQTT device for CV TDD events"
+  Labels = [ "MQTT", "cv", "TDD"]
+  [DeviceList.Protocols]
+    [DeviceList.Protocols.mqtt]
+       Schema = "tcp"
+       Host = "mqtt"
+       Port = "1883"
+       ClientId = "edgex-mqtt-tdd-command-pub"
+       User = ""
+       Password = ""
+       Topic = "EdgeXTddCommand"
 
 # Driver configs
 [Driver]
