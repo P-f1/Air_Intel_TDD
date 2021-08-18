@@ -64,8 +64,8 @@ services:
     environment: 
       - EDGEX_DB=redis
       - EDGEX_SECURE=false
-      - CONSUL_CLIENT_INTERFACE: ${CONSUL_CLIENT_INTERFACE}
-      - CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE}
+#      - CONSUL_CLIENT_INTERFACE: ${CONSUL_CLIENT_INTERFACE}
+#      - CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE}
 
   redis:
     image: redis:5.0.8-alpine
