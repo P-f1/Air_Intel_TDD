@@ -3,20 +3,23 @@ function deploy {
 	DeployBaseFolder=$(pwd)
 	ProjectBaseFolder=${DeployBaseFolder%/*}
 	WorkingFolder=$DeployBaseFolder"/"$DeployType
-	ArtifactsFolder=$ProjectBaseFolder"/artifacts/docker-compose"
-	PluginsFolder=$ProjectBaseFolder"/artifacts/plugins/python"
-	Descriptor=$ArtifactsFolder"/"$ServiceName".yml"
+	ArtifactsFolder=$ProjectBaseFolder"/artifacts/docker-compose/"$ServiceName
+	Descriptor=$ProjectBaseFolder"/artifacts/docker-compose/"$ServiceName".yml"
 
 	echo "BaseFolder="$DeployBaseFolder
 	echo "WorkingFolder="$WorkingFolder
 	echo "ArtifactsFolder="$ArtifactsFolder
 	echo "PluginsFolder="$PluginsFolder
-
-	rm -rf ./$DeployType/$ServiceName/$InstanceID
-	mkdir -p ./$DeployType/$ServiceName/$InstanceID
+	echo "Descriptor="$Descriptor
+	
+	rm -rf ./$DeployType/$ServiceName
+	mkdir -p ./$DeployType/$ServiceName
 
 	cp -R $Descriptor ./$DeployType/$ServiceName
-	cp -R ../build/$ServiceName/* ./$DeployType/$ServiceName/$InstanceID
+	
+	if [ -f "$ArtifactsFolder" ]; then
+		cp $ArtifactsFolder/* ./$DeployType/$ServiceName/$InstanceID
+	fi
 
 	cd ./$DeployType/$ServiceName
 	echo "Deploy from $(pwd)"
