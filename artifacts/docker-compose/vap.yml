@@ -13,10 +13,10 @@ services:
     environment:
       - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
       - DEFECT=missing_pick
-      - MQTT_BROKER_HOST=localhost
+      - MQTT_BROKER_HOST=mqtt
       - MQTT_BROKER_PORT=1883
       - MQTT_BROKER_TOPIC=vaserving
-      - MQTT_DESTINATION_HOST=localhost:1883
+      - MQTT_DESTINATION_HOST=mqtt:1883
       - CAMERA0_SRC=file:///home/video-analytics-serving/data/textile.mp4
     devices:
       - /dev/ion:/dev/ion
