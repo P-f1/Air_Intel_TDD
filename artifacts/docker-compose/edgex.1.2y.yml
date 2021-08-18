@@ -22,7 +22,7 @@
 # NOTE:  this Docker Compose file does not contain the security services - namely the API Gateway
 # and Secret Store
 
-version: '3.4'
+version: '3.7'
 
 # all common shared environment variables defined here:
 x-common-env-variables: &common-variables
@@ -37,6 +37,16 @@ x-common-env-variables: &common-variables
   Clients_RulesEngine_Host: edgex-kuiper
   Clients_VirtualDevice_Host: edgex-device-virtual
   Databases_Primary_Host: edgex-redis
+#  Registry_Host: localhost
+#  Clients_CoreData_Host: localhost
+#  Clients_Data_Host: localhost # For device Services
+#  Clients_Notifications_Host: localhost
+#  Clients_Metadata_Host: localhost
+#  Clients_Command_Host: localhost
+#  Clients_Scheduler_Host: localhost
+#  Clients_RulesEngine_Host: localhost
+#  Clients_VirtualDevice_Host: localhost
+#  Databases_Primary_Host: localhost
   # Required in case old configuration from previous release used.
   # Change to "true" if re-enabling logging service for remote logging
   Logging_EnableRemote: "false"
@@ -51,30 +61,30 @@ services:
   consul:
     image: edgexfoundry/docker-edgex-consul:1.2.0
     ports:
-      - "127.0.0.1:8400:8400"
-#      - "127.0.0.1:8500:8500"
+      - "localhost:8400:8400"
+#      - "localhost:8500:8500"
       - "8500:8500"
     container_name: edgex-core-consul
     hostname: edgex-core-consul
     networks:
-      - textile-defect-detection
+      - edgex-network
     volumes:
       - consul-config:/consul/config:z
       - consul-data:/consul/data:z
     environment: 
-      - EDGEX_DB=redis
-      - EDGEX_SECURE=false
-#      - CONSUL_CLIENT_INTERFACE: ${CONSUL_CLIENT_INTERFACE}
-#      - CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE}
+      EDGEX_DB: localhost
+      EDGEX_SECURE: false
+      CONSUL_CLIENT_INTERFACE: ${CONSUL_CLIENT_INTERFACE}
+      CONSUL_BIND_INTERFACE: ${CONSUL_BIND_INTERFACE} 
 
   redis:
     image: redis:5.0.8-alpine
     ports:
-      - "127.0.0.1:6379:6379"
+      - "localhost:6379:6379"
     container_name: edgex-redis
     hostname: edgex-redis
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
     volumes:
@@ -83,14 +93,20 @@ services:
   notifications:
     image: edgexfoundry/docker-support-notifications-go:1.2.1
     ports:
-      - "127.0.0.1:48060:48060"
+      - "localhost:48060:48060"
     container_name: edgex-support-notifications
     hostname: edgex-support-notifications
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-support-notifications
+#      Service_Host: localhost
+    entrypoint:
+      - /support-notifications
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - consul
       - redis
@@ -98,16 +114,23 @@ services:
   metadata:
     image: edgexfoundry/docker-core-metadata-go:1.2.1
     ports:
-      - "127.0.0.1:48081:48081"
+      - "localhost:48081:48081"
     container_name: edgex-core-metadata
     hostname: edgex-core-metadata
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-core-metadata
+#      Service_Host: localhost
       Service_Timeout: "20000"
       Notifications_Sender: edgex-core-metadata
+#      Notifications_Sender: localhost
+    entrypoint:
+      - /core-metadata
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - consul
       - redis
@@ -116,15 +139,21 @@ services:
   data:
     image: edgexfoundry/docker-core-data-go:1.2.1
     ports:
-      - "127.0.0.1:48080:48080"
-      - "127.0.0.1:5563:5563"
+      - "localhost:48080:48080"
+      - "localhost:5563:5563"
     container_name: edgex-core-data
     hostname: edgex-core-data
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-core-data
+#      Service_Host: localhost
+    entrypoint:
+      - /core-data
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - consul
       - redis
@@ -133,14 +162,20 @@ services:
   command:
     image: edgexfoundry/docker-core-command-go:1.2.1
     ports:
-      - "127.0.0.1:48082:48082"
+      - "localhost:48082:48082"
     container_name: edgex-core-command
     hostname: edgex-core-command
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-core-command
+#      Service_Host: localhost
+    entrypoint:
+      - /core-command
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - consul
       - redis
@@ -149,16 +184,24 @@ services:
   scheduler:
     image: edgexfoundry/docker-support-scheduler-go:1.2.1
     ports:
-      - "127.0.0.1:48085:48085"
+      - "localhost:48085:48085"
     container_name: edgex-support-scheduler
     hostname: edgex-support-scheduler
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-support-scheduler
       IntervalActions_ScrubPushed_Host: edgex-core-data
       IntervalActions_ScrubAged_Host: edgex-core-data
+#      Service_Host: localhost
+#      IntervalActions_ScrubPushed_Host: localhost
+#      IntervalActions_ScrubAged_Host: localhost
+    entrypoint:
+      - /support-scheduler
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - consul
       - redis
@@ -170,7 +213,7 @@ services:
     container_name: mqtt
     hostname: mqtt
     networks:
-      - textile-defect-detection  
+      - edgex-networks
 
 #################################################################
 # Device Services
@@ -185,10 +228,16 @@ services:
     volumes:
       - ${Artifacts}/res/device-rest-go/:/res/
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-device-rest
+#      Service_Host: localhost
+    entrypoint:
+      - /device-rest-go
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - data
       - command
@@ -202,20 +251,28 @@ services:
     volumes:
       - ${Artifacts}/res/device-mqtt-go/:/res/
     networks:
-      - textile-defect-detection
+      - edgex-network
     environment:
       <<: *common-variables
       Service_Host: edgex-device-mqtt
+#      Service_Host: localhost
       Driver_IncomingHost: mqtt
+#      Driver_IncomingHost: localhost
       Driver_ResponseHost: mqtt
+      Driver_ResponseHost: localhost
       Driver_IncomingTopic: edgex/#
       Driver_IncomingClientId: edgex-mqtt-sub
       Driver_ResponseClientId: edgex-mqtt-command-sub
       Driver_ResponseTopic: Edgex-command-response
+    entrypoint:
+      - /device-mqtt
+      - -cp=consul.http://localhost:8500
+      - --confdir=/res
+      - --registry
     depends_on:
       - data
       - command
 
 networks:
-  textile-defect-detection:
+  edgex-network:
     driver: "bridge"
