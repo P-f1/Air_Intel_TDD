@@ -61,9 +61,9 @@ services:
   consul:
     image: edgexfoundry/docker-edgex-consul:1.2.0
     ports:
-      - "localhost:8400:8400"
-      - "localhost:8500:8500"
-      - "8500:8500"
+      - localhost:8400:8400
+      - localhost:8500:8500
+      - 8500:8500
     container_name: edgex-core-consul
     hostname: edgex-core-consul
     networks:
@@ -80,7 +80,7 @@ services:
   redis:
     image: redis:5.0.8-alpine
     ports:
-      - "localhost:6379:6379"
+      - localhost:6379:6379
     container_name: edgex-redis
     hostname: edgex-redis
     networks:
@@ -93,7 +93,7 @@ services:
   notifications:
     image: edgexfoundry/docker-support-notifications-go:1.2.1
     ports:
-      - "localhost:48060:48060"
+      - localhost:48060:48060
     container_name: edgex-support-notifications
     hostname: edgex-support-notifications
     networks:
@@ -114,7 +114,7 @@ services:
   metadata:
     image: edgexfoundry/docker-core-metadata-go:1.2.1
     ports:
-      - "localhost:48081:48081"
+      - localhost:48081:48081
     container_name: edgex-core-metadata
     hostname: edgex-core-metadata
     networks:
@@ -139,8 +139,8 @@ services:
   data:
     image: edgexfoundry/docker-core-data-go:1.2.1
     ports:
-      - "localhost:48080:48080"
-      - "localhost:5563:5563"
+      - localhost:48080:48080
+      - localhost:5563:5563
     container_name: edgex-core-data
     hostname: edgex-core-data
     networks:
@@ -162,7 +162,7 @@ services:
   command:
     image: edgexfoundry/docker-core-command-go:1.2.1
     ports:
-      - "localhost:48082:48082"
+      - localhost:48082:48082
     container_name: edgex-core-command
     hostname: edgex-core-command
     networks:
@@ -184,7 +184,7 @@ services:
   scheduler:
     image: edgexfoundry/docker-support-scheduler-go:1.2.1
     ports:
-      - "localhost:48085:48085"
+      - localhost:48085:48085
     container_name: edgex-support-scheduler
     hostname: edgex-support-scheduler
     networks:
@@ -209,7 +209,7 @@ services:
   mqtt:
     image: eclipse-mosquitto:1.5.8
     ports:
-      - "1883:1883"
+      - 1883:1883
     container_name: mqtt
     hostname: mqtt
     networks:
@@ -222,7 +222,7 @@ services:
   device-rest:
     image: edgexfoundry/docker-device-rest-go:1.1.1
     ports:
-      - "49986:49986"
+      - 49986:49986
     container_name: edgex-device-rest
     hostname: edgex-device-rest
     volumes:
@@ -245,7 +245,7 @@ services:
   device-mqtt:
     image: edgexfoundry/docker-device-mqtt-go:1.2.1
     ports:
-      - "49982:49982"
+      - 49982:49982
     container_name: edgex-device-mqtt
     hostname: edgex-device-mqtt
     volumes:
@@ -275,4 +275,4 @@ services:
 
 networks:
   edgex-network:
-    driver: "bridge"
+    driver: bridge
