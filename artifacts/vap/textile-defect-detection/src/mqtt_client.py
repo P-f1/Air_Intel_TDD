@@ -49,6 +49,7 @@ def on_message(out_bound_client, user_data, msg):
     for obj in objects:
         label = obj["classification_layer_name:predictions_1/Softmax"]["label"]
         target_defect = obj["tags"]["target_defect"]
+        timestamp = obj["timestamp"]
         if label == target_defect or "*" == target_defect:
             frame_id = result["frame_id"]
             frame_path = FRAME_STORE_TEMPLATE % frame_id
@@ -57,7 +58,7 @@ def on_message(out_bound_client, user_data, msg):
             prediction["target_defect"] = target_defect
             prediction["label"] = label
             prediction["frame_path"] = frame_path
-            prediction["timestamp"] = EDGEX_ENTER_EVENT
+            prediction["timestamp"] = timestamp
             out_bound_client.publish(MQTT_OUTBOUND_TOPIC_NAME, wrap_edgex_event(EDGEX_DEVICE_NAME, EDGEX_TDD_EVENT, json.dumps(prediction)))
     
 def wrap_edgex_event(device_name, cmd_name, data):
