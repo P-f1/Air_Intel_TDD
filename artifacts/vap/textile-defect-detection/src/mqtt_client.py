@@ -46,15 +46,16 @@ def on_message(out_bound_client, user_data, msg):
     if not "frame_id" in result:
         return
     objects = result.get("objects", [])
+    target_defect = result["tags"]["target_defect"]
+    timestamp = result["timestamp"]
+    source = result["source"]
     for obj in objects:
         label = obj["classification_layer_name:predictions_1/Softmax"]["label"]
-        target_defect = obj["tags"]["target_defect"]
-        timestamp = obj["timestamp"]
         if label == target_defect or "*" == target_defect:
             frame_id = result["frame_id"]
             frame_path = FRAME_STORE_TEMPLATE % frame_id
             prediction = {}
-            prediction["source"] = obj['source']
+            prediction["source"] = source
             prediction["target_defect"] = target_defect
             prediction["label"] = label
             prediction["frame_path"] = frame_path
@@ -109,5 +110,4 @@ if __name__ == "__main__":
         client.loop_forever()
     except:
         print("Unexpected error:", sys.exc_info())
-        print("WARNING: Textile defect detection service could not connect to mqtt broker, no messages will be produced")
-
+        print("WARNING: Textile defect detection service throws error, will exit")

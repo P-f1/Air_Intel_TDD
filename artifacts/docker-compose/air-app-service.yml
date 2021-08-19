@@ -1,6 +1,6 @@
 networks:
-  edgex-network:
-    driver: bridge
+  edgex12_textile-defect-detection:
+    external: true   
 services:
 
 #################################################################
@@ -14,7 +14,7 @@ services:
     container_name: air-app-service-zmq-to-mqtt
     hostname: air-app-service-zmq-to-mqtt
     networks:
-      - edgex-network
+      - edgex12_textile-defect-detection
     environment:
       REGISTRY_HOST: ${EDGEX_CORE_CONSUL}
       CLIENTS_COREDATA_HOST: ${EDGEX_CORE_DATA_HOST}
@@ -56,7 +56,7 @@ services:
     container_name: air-app-service-metadata
     hostname: air-app-service-metadata
     networks:
-      - edgex-network
+      - edgex12_textile-defect-detection
     environment:
       REGISTRY_HOST: ${EDGEX_CORE_CONSUL}
       CLIENTS_COREDATA_HOST: ${EDGEX_CORE_DATA_HOST}
@@ -110,7 +110,7 @@ services:
 #    container_name: labsair-device-siemens-simulator
 #    hostname: labsair-device-siemens-simulator
 #    networks:
-#      - edgex-network
+#      - edgex12_textile-defect-detection
 #    environment:
 #      REGISTRY_HOST: ${EDGEX_CORE_CONSUL}
 #      CLIENTS_COREDATA_HOST: ${EDGEX_CORE_DATA_HOST}
