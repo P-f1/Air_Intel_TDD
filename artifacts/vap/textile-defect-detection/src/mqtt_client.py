@@ -107,6 +107,6 @@ if __name__ == "__main__":
         client.connect(MQTT_BROKER_HOST, int(MQTT_BROKER_PORT), MQTT_KEEPALIVE)
         client.loop_forever()
     except:
-        print("Unexpected error:", sys.exc_info()[0])
+        print("Unexpected error:", sys.exc_info())
         print("WARNING: Textile defect detection service could not connect to mqtt broker, no messages will be produced")
 
