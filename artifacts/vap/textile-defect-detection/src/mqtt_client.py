@@ -85,16 +85,16 @@ def send_request_to_vas():
 
 if __name__ == "__main__":
 
-    print("EDGEX_DEVICE_NAME        : {}", EDGEX_DEVICE_NAME)
-    print("EDGEX_TDD_EVENT          : {}", EDGEX_TDD_EVENT)
-    print("CAMERA0_SRC              : {}", CAMERA0_SRC)
-    print("DEFECT                   : {}", DEFECT)
-    print("FRAME_STORE_TEMPLATE     : {}", FRAME_STORE_TEMPLATE)
-    print("MQTT_BROKER_HOST         : {}", MQTT_BROKER_HOST)
-    print("MQTT_BROKER_PORT         : {}", MQTT_BROKER_PORT)
-    print("MQTT_BROKER_TOPIC        : {}", MQTT_BROKER_TOPIC)
-    print("MQTT_OUTBOUND_TOPIC_NAME : {}", edgex)
-    print("MQTT_KEEPALIVE           : {}", 12*60*60)
+    print("EDGEX_DEVICE_NAME        : {}".format(EDGEX_DEVICE_NAME))
+    print("EDGEX_TDD_EVENT          : {}".format(EDGEX_TDD_EVENT))
+    print("CAMERA0_SRC              : {}".format(CAMERA0_SRC))
+    print("DEFECT                   : {}".format( DEFECT))
+    print("FRAME_STORE_TEMPLATE     : {}".format(FRAME_STORE_TEMPLATE))
+    print("MQTT_BROKER_HOST         : {}".format(MQTT_BROKER_HOST))
+    print("MQTT_BROKER_PORT         : {}".format(MQTT_BROKER_PORT))
+    print("MQTT_BROKER_TOPIC        : {}".format(MQTT_BROKER_TOPIC))
+    print("MQTT_OUTBOUND_TOPIC_NAME : {}".format(MQTT_OUTBOUND_TOPIC_NAME))
+    print("MQTT_KEEPALIVE           : {}".format(12*60*60))
 
     client = mqtt.Client("Textile Defect Detector")
     client.on_connect = on_connect
