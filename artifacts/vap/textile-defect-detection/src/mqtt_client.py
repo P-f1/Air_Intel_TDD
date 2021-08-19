@@ -44,6 +44,7 @@ def on_message(out_bound_client, user_data, msg):
     if not "frame_id" in result:
         return
     objects = result.get("objects", [])
+    test_id = result["tags"]["test_id"]
     target_defect = result["tags"]["target_defect"]
     timestamp = result["timestamp"]
     source = result["source"]
@@ -54,8 +55,10 @@ def on_message(out_bound_client, user_data, msg):
             frame_path = FRAME_STORE_TEMPLATE % frame_id
             prediction = {}
             prediction["source"] = source
+            prediction["test_id"] = test_id
             prediction["target_defect"] = target_defect
             prediction["label"] = label
+            prediction["frame_id"] = frame_id
             prediction["frame_path"] = frame_path
             prediction["timestamp"] = timestamp
             out_bound_client.publish(MQTT_OUTBOUND_TOPIC_NAME, wrap_edgex_event(EDGEX_DEVICE_NAME, EDGEX_TDD_EVENT, json.dumps(prediction)))
