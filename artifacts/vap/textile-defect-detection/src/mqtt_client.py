@@ -17,8 +17,6 @@ import requests
 
 EDGEX_DEVICE_NAME = os.environ['EDGEX_DEVICE_NAME']
 EDGEX_TDD_EVENT = os.environ['EDGEX_TDD_EVENT']
-CAMERA0_SRC = os.environ['CAMERA0_SRC']
-DEFECT = os.environ['DEFECT']
 FRAME_STORE_TEMPLATE = os.environ['FRAME_STORE_TEMPLATE']
 MQTT_BROKER_HOST = os.environ['MQTT_BROKER_HOST']
 MQTT_BROKER_PORT = os.environ['MQTT_BROKER_PORT']
@@ -91,8 +89,6 @@ if __name__ == "__main__":
 
     print("EDGEX_DEVICE_NAME        : {}".format(EDGEX_DEVICE_NAME))
     print("EDGEX_TDD_EVENT          : {}".format(EDGEX_TDD_EVENT))
-    print("CAMERA0_SRC              : {}".format(CAMERA0_SRC))
-    print("DEFECT                   : {}".format( DEFECT))
     print("FRAME_STORE_TEMPLATE     : {}".format(FRAME_STORE_TEMPLATE))
     print("MQTT_BROKER_HOST         : {}".format(MQTT_BROKER_HOST))
     print("MQTT_BROKER_PORT         : {}".format(MQTT_BROKER_PORT))

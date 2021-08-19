@@ -11,16 +11,14 @@ services:
     container_name: textile-defect-detection
     hostname: textile-defect-detection
     environment:
-      - EDGEX_DEVICE_NAME=device-tdd-roi-mqtt
-      - EDGEX_TDD_EVENT=cv-tdd-event
-      - FRAME_STORE_TEMPLATE=/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg
-      - DEFECT=missing_pick
-      - MQTT_BROKER_HOST=mqtt
-      - MQTT_BROKER_PORT=1883
-      - MQTT_BROKER_TOPIC=vaserving
-      - MQTT_DESTINATION_HOST=mqtt:1883
-      - MQTT_OUTBOUND_TOPIC_NAME=edgex
-      - CAMERA0_SRC=file:///home/video-analytics-serving/data/textile.mp4
+      - EDGEX_DEVICE_NAME=${EDGEX_DEVICE_NAME}
+      - EDGEX_TDD_EVENT=${EDGEX_TDD_EVENT}
+      - FRAME_STORE_TEMPLATE=${FRAME_STORE_TEMPLATE}
+      - MQTT_BROKER_HOST=${MQTT_BROKER_HOST}
+      - MQTT_BROKER_PORT=${MQTT_BROKER_PORT}
+      - MQTT_BROKER_TOPIC=${MQTT_BROKER_TOPIC}
+      - MQTT_DESTINATION_HOST=${MQTT_DESTINATION_HOST}
+      - MQTT_OUTBOUND_TOPIC_NAME=${MQTT_OUTBOUND_TOPIC_NAME}
     devices:
       - /dev/ion:/dev/ion
     volumes:
