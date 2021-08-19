@@ -19,6 +19,7 @@ services:
       - MQTT_BROKER_PORT=1883
       - MQTT_BROKER_TOPIC=vaserving
       - MQTT_DESTINATION_HOST=mqtt:1883
+      - MQTT_OUTBOUND_TOPIC_NAME=edgex
       - CAMERA0_SRC=file:///home/video-analytics-serving/data/textile.mp4
     devices:
       - /dev/ion:/dev/ion

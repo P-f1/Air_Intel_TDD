@@ -23,7 +23,7 @@ FRAME_STORE_TEMPLATE = os.environ['FRAME_STORE_TEMPLATE']
 MQTT_BROKER_HOST = os.environ['MQTT_BROKER_HOST']
 MQTT_BROKER_PORT = os.environ['MQTT_BROKER_PORT']
 MQTT_BROKER_TOPIC = os.environ['MQTT_BROKER_TOPIC']
-MQTT_OUTBOUND_TOPIC_NAME = "edgex"
+MQTT_OUTBOUND_TOPIC_NAME = os.environ['MQTT_OUTBOUND_TOPIC_NAME']
 MQTT_KEEPALIVE = 12*60*60
 
 def on_connect(client, user_data, _unused_flags, return_code):
@@ -38,7 +38,7 @@ def on_connect(client, user_data, _unused_flags, return_code):
 def on_subscribe(client, userdata, message, qos):
     print("Subscribed to topic")
 
-def on_message(_unused_client, user_data, msg):
+def on_message(out_bound_client, user_data, msg):
     result = json.loads(msg.payload)
     print(result)
     if not "frame_id" in result:
@@ -56,7 +56,7 @@ def on_message(_unused_client, user_data, msg):
             prediction["label"] = label
             prediction["frame_path"] = frame_path
             prediction["timestamp"] = EDGEX_ENTER_EVENT
-            client.publish(MQTT_OUTBOUND_TOPIC_NAME, wrap_edgex_event(EDGEX_DEVICE_NAME, EDGEX_TDD_EVENT, json.dumps(prediction)))
+            out_bound_client.publish(MQTT_OUTBOUND_TOPIC_NAME, wrap_edgex_event(EDGEX_DEVICE_NAME, EDGEX_TDD_EVENT, json.dumps(prediction)))
     
 def wrap_edgex_event(device_name, cmd_name, data):
     edgexMQTTWrapper = {}
