@@ -27,6 +27,7 @@ MQTT_OUTBOUND_TOPIC_NAME = os.environ['MQTT_OUTBOUND_TOPIC_NAME']
 MQTT_KEEPALIVE = 12*60*60
 
 def on_connect(client, user_data, _unused_flags, return_code):
+    print("On connect!")
     if return_code == 0:
         print("Connected to broker at {}:{}".format(MQTT_BROKER_HOST, MQTT_BROKER_PORT))
         print("Subscribing to topic {}".format(MQTT_BROKER_TOPIC))
@@ -36,11 +37,12 @@ def on_connect(client, user_data, _unused_flags, return_code):
         sys.exit(1)
 
 def on_subscribe(client, userdata, message, qos):
-    print("Subscribed to topic")
+    print("Subscribed to topic!")
 
 def on_message(out_bound_client, user_data, msg):
+    print("On Message!")
     result = json.loads(msg.payload)
-    print(result)
+#    print(result)
     if not "frame_id" in result:
         return
     objects = result.get("objects", [])
@@ -96,7 +98,7 @@ if __name__ == "__main__":
     print("MQTT_OUTBOUND_TOPIC_NAME : {}".format(MQTT_OUTBOUND_TOPIC_NAME))
     print("MQTT_KEEPALIVE           : {}".format(12*60*60))
 
-    client = mqtt.Client("Textile Defect Detector")
+    client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
     client.on_subscribe = on_subscribe
