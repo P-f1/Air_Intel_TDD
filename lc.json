@@ -1,8 +1,8 @@
 {
-	"id" : "ID-000000000002",
-	"name" : "Air_ORRA_RTSF",
-	"description" : "Project Air/Exgexfoundry integration",
-	"created" : "2021-06-15",
+	"id" : "ID-20210816",
+	"name" : "Air_Intel_TDD",
+	"description" : "Project Air/Intel Textile Defect Detection",
+	"created" : "2021-08-16",
 	"parameter" : {
 		"build" : {},
 		"deploy" : {
@@ -10,19 +10,17 @@
     		"Method": "Script",
     		"NoF1Descriptor": "True",
 			"Deployable" : "",
-        	"TargetServer":"http://54.157.165.142:3090/v1",
-        	"Username":"admin:NRtypkkV2fO514hZcvVz0Z194AhiPz@myorg",
-        	"Platform":"linux/amd64",
-        	"DeployConstrains" : "[\"role == RTSF_Demo\"]",
-        	"ServiceProperties" : "{}"
+        	"Username":"ubuntu",
+        	"TargetServer":"52.7.96.87",
+        	"Platform":"linux/amd64"
 		},
 		"undeploy" : {
     		"ServiceType" : "docker|docker-oh",
     		"Method": "Script",
     		"NoF1Descriptor": "True",
 			"Deployable" : "",
-        	"TargetServer":"http://54.157.165.142:3090/v1",
-        	"Username":"admin:NRtypkkV2fO514hZcvVz0Z194AhiPz@myorg",
+        	"Username":"ubuntu",
+        	"TargetServer":"52.7.96.87",
         	"Platform":"linux/amd64"
 		}
 	}
