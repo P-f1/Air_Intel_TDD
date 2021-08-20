@@ -115,6 +115,14 @@ Body:{
 
 95-100 good
 
+*
+missing_pick
+selvedge
+hole
+stain
+color_flecks
+good
+
 
 Connected to broker at mqtt:1883,
 Subscribing to topic vaserving,
