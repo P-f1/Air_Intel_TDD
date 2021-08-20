@@ -10,6 +10,7 @@
     		"Method": "Script",
     		"NoF1Descriptor": "True",
 			"Deployable" : "",
+        	"DeployType":"docker",
         	"Username":"ubuntu",
         	"TargetServer":"52.7.96.87",
         	"Platform":"linux/amd64"
@@ -19,6 +20,7 @@
     		"Method": "Script",
     		"NoF1Descriptor": "True",
 			"Deployable" : "",
+        	"DeployType":"docker",
         	"Username":"ubuntu",
         	"TargetServer":"52.7.96.87",
         	"Platform":"linux/amd64"

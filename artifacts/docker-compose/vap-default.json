@@ -1,4 +1,11 @@
 {
-    "Artifacts":"/home/ubuntu/loss-detection-app",
-    "Demo":"/home/ubuntu/loss-detection-demo"
+        "EDGEX_DEVICE_NAME":"device-cv-tdd-mqtt",
+        "EDGEX_TDD_EVENT":"cv-tdd-event",
+        "FRAME_STORE_TEMPLATE":"/home/ubuntu/vas/video-analytics-serving/frame_store/%08d.jpg",
+        "MQTT_BROKER_HOST":"mqtt",
+        "MQTT_BROKER_PORT":"1883",
+        "MQTT_BROKER_TOPIC":"vaserving",
+        "MQTT_OUTBOUND_TOPIC_NAME":"edgex",
+        "USER_HOME":"/home/ubuntu",
+        "Artifacts":"/home/ubuntu/vas/video-analytics-serving",
 }
