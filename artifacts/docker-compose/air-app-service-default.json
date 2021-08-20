@@ -34,5 +34,5 @@
         "EDGE_MQTT_USER":"",
         "EDGE_MQTT_PASSWORD":"",
         "EDGE_MQTT_DATA_TOPIC":"edgex",
-        "EDGE_MQTT_ZMQ_TO_MQTT_PUBLISHER":"IntelEdgeZMQToMQTTClient",
+        "EDGE_MQTT_ZMQ_TO_MQTT_PUBLISHER":"IntelEdgeZMQToMQTTClient"
 }

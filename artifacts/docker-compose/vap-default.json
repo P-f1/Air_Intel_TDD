@@ -7,5 +7,5 @@
         "MQTT_BROKER_TOPIC":"vaserving",
         "MQTT_OUTBOUND_TOPIC_NAME":"edgex",
         "USER_HOME":"/home/ubuntu",
-        "Artifacts":"/home/ubuntu/vas/video-analytics-serving",
+        "Artifacts":"/home/ubuntu/vas/video-analytics-serving"
 }
