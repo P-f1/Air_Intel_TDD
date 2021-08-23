@@ -18,8 +18,8 @@ services:
       - MQTT_BROKER_PORT=${MQTT_BROKER_PORT}
       - MQTT_BROKER_TOPIC=${MQTT_BROKER_TOPIC}
       - MQTT_OUTBOUND_TOPIC_NAME=${MQTT_OUTBOUND_TOPIC_NAME}
-    devices:
-      - /dev/ion:/dev/ion
+#    devices:
+#      - /dev/ion:/dev/ion
     volumes:
       - ${USER_HOME}/.Xauthority:/home/video-analytics-serving/.Xauthority 
       - ${Artifacts}/samples/textile_defect_classifier:/home/video-analytics-serving/samples/textile_detect_classifier 
